@@ -5,161 +5,254 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bee Swarm Fan Hub</title>
 <style>
-  /* Reset & basics */
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f5f5f5; color:#222; }
+/* --- Reset & Basics --- */
+* { box-sizing:border-box; margin:0; padding:0; }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: url('https://i.imgur.com/your_background.png') no-repeat center center fixed;
+  background-size: cover;
+  color:#fff;
+  overflow-x:hidden;
+}
 
-  /* Container */
-  .container { max-width: 1000px; margin: auto; padding: 20px; }
+/* --- Overlay Container --- */
+.container {
+  max-width: 1000px;
+  margin:auto;
+  padding:20px;
+  background: rgba(0,0,0,0.6);
+  border-radius: 15px;
+}
 
-  /* Header */
-  header { display:flex; justify-content: space-between; align-items:center; margin-bottom:20px; }
-  header h1 { color:#ffb800; font-size:2rem; }
+/* --- Header & Logo --- */
+header {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-bottom:20px;
+}
+header img {
+  width:300px;
+  margin-bottom:10px;
+  border-radius:10px;
+}
 
-  /* Nav Buttons */
-  nav button { background:#ffb800; border:none; border-radius:6px; padding:10px 16px; margin-right:10px; cursor:pointer; font-weight:bold; transition:0.2s; }
-  nav button:hover { background:#e6a800; }
+/* --- Hamburger Menu --- */
+.menu-button {
+  display:none;
+  background:#ffb800;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+nav {
+  display:flex;
+  gap:10px;
+  margin-top:10px;
+}
+nav button {
+  background:#ffb800;
+  border:none;
+  border-radius:6px;
+  padding:6px 12px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:0.2s;
+}
+nav button:hover { background:#e6a800; }
 
-  /* Page sections */
-  .page { display:none; margin-top:20px; }
-  .page.active { display:block; }
+/* --- Responsive Hamburger --- */
+@media(max-width:768px){
+  nav { display:none; flex-direction:column; margin-top:10px; }
+  nav.open { display:flex; }
+  .menu-button { display:block; margin-bottom:10px; }
+}
 
-  /* Cards */
-  .cards { display:flex; gap:20px; flex-wrap:wrap; margin-top:20px; }
-  .card { flex:1; background:white; padding:20px; border-radius:10px; text-align:center; box-shadow:0 6px 15px rgba(0,0,0,0.1); cursor:pointer; transition:0.2s; }
-  .card:hover { transform: translateY(-5px); box-shadow:0 12px 20px rgba(0,0,0,0.15); }
+/* --- Pages --- */
+.page { display:none; margin-top:20px; }
+.page.active { display:block; }
 
-  /* Inputs & buttons */
-  input, select, textarea, button { padding:8px; margin:6px 0; border-radius:6px; border:1px solid #ccc; width:100%; max-width:300px; }
-  button.action { background:#28a745; color:white; border:none; cursor:pointer; transition:0.2s; }
-  button.action:hover { background:#218838; }
+/* --- Cards --- */
+.cards {
+  display:flex;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-top:20px;
+}
+.card {
+  flex:1;
+  background:rgba(255,255,255,0.1);
+  padding:20px;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 6px 15px rgba(0,0,0,0.2);
+  cursor:pointer;
+  transition:0.3s;
+}
+.card:hover { transform:translateY(-5px); box-shadow:0 12px 20px rgba(0,0,0,0.3); }
 
-  /* Hive grid */
-  .hive-grid { display:grid; grid-template-columns:repeat(10,50px); gap:5px; margin-top:10px; }
-  .hive-grid div { background:#fff7df; border:1px solid #f2daa0; border-radius:6px; display:flex; justify-content:center; align-items:center; cursor:pointer; font-size:12px; transition:0.2s; }
-  .hive-grid div:hover { background:#ffe699; }
+/* --- Inputs --- */
+input, select, textarea, button { 
+  padding:6px; margin:6px 0; border-radius:6px; border:none;
+}
+button.action { background:#28a745; color:white; width:auto; padding:6px 12px; cursor:pointer; }
+button.action:hover { background:#218838; }
 
-  /* Bee list & tooltips */
-  .tooltip { position: relative; display: inline-block; border-bottom:1px dotted black; }
-  .tooltip .tooltiptext { visibility:hidden; width:200px; background:#555; color:#fff; text-align:left; border-radius:6px; padding:5px; position:absolute; z-index:1; bottom:125%; left:50%; margin-left:-100px; opacity:0; transition:0.3s; font-size:12px; }
-  .tooltip:hover .tooltiptext { visibility:visible; opacity:1; }
+/* --- Hive Grid Bottom-to-Top --- */
+.hive-grid {
+  display:grid;
+  grid-template-columns:repeat(10,50px);
+  grid-auto-rows:50px;
+  gap:5px;
+  margin-top:10px;
+  transform:rotateX(180deg); /* flips vertically to bottom-top */
+}
+.hive-grid div {
+  background:#fff7df;
+  border:1px solid #f2daa0;
+  border-radius:6px;
+  display:flex; justify-content:center; align-items:center;
+  font-size:12px;
+  cursor:pointer;
+  transition:0.2s;
+  transform:rotateX(180deg); /* flips each cell back upright */
+}
 
-  /* Tables */
-  table { border-collapse: collapse; width: 100%; margin-top:10px; }
-  th, td { border:1px solid #ccc; padding:8px; text-align:left; }
-  th { background:#ffeb99; }
+/* --- Tooltip --- */
+.tooltip { position:relative; display:inline-block; border-bottom:1px dotted #fff; }
+.tooltip .tooltiptext {
+  visibility:hidden;
+  width:200px;
+  background:#555;
+  color:#fff;
+  text-align:left;
+  border-radius:6px;
+  padding:5px;
+  position:absolute;
+  z-index:1;
+  bottom:125%;
+  left:50%;
+  margin-left:-100px;
+  opacity:0;
+  transition:0.3s;
+  font-size:12px;
+}
+.tooltip:hover .tooltiptext { visibility:visible; opacity:1; }
+
+/* --- Tables --- */
+table { border-collapse:collapse; width:100%; margin-top:10px; }
+th, td { border:1px solid #ccc; padding:6px; text-align:left; }
+th { background:#ffeb99; font-weight:bold; }
+
 </style>
 </head>
 <body>
-
 <div class="container">
-  <header>
-    <h1>Bee Swarm Fan Hub</h1>
-    <nav>
-      <button data-page="home">Home</button>
-      <button data-page="profile">Profile</button>
-      <button data-page="hive">Hive Builder</button>
-      <button data-page="guides">Guides</button>
-    </nav>
-  </header>
+<header>
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZ7XEJ3dh5CfQkTypXUXZW9_zwLlGdpQTORg&s" alt="BSS Logo">
+  <button class="menu-button">☰ Menu</button>
+  <nav>
+    <button data-page="home">Home</button>
+    <button data-page="profile">Profile</button>
+    <button data-page="hive">Hive Builder</button>
+    <button data-page="guides">Guides</button>
+  </nav>
+</header>
 
-  <!-- Home Page -->
-  <div id="home" class="page active">
-    <p>Welcome to the Bee Swarm Fan Hub! Navigate using the buttons above.</p>
-    <div class="cards">
-      <div class="card" data-page="profile">Profile / Lookup</div>
-      <div class="card" data-page="hive">Hive Builder</div>
-      <div class="card" data-page="guides">Guides & Bees</div>
-    </div>
-  </div>
-
-  <!-- Profile Page -->
-  <div id="profile" class="page">
-    <h2>Profile</h2>
-    <input id="username" type="text" placeholder="Username">
-    <input id="honey" type="text" placeholder="Honey amount">
-    <textarea id="notes" placeholder="Notes"></textarea>
-    <button class="action" id="saveProfile">Save Profile</button>
-    <button class="action" id="loadProfile">Load Profile</button>
-
-    <h3>Hive Preview</h3>
-    <div id="hivePreview" class="hive-grid"></div>
-
-    <h3>Player Lookup</h3>
-    <input id="lookupUsername" type="text" placeholder="Enter username to lookup">
-    <button class="action" id="searchPlayer">Search Player</button>
-    <div id="lookupResult"></div>
-  </div>
-
-  <!-- Hive Builder -->
-  <div id="hive" class="page">
-    <h2>Hive Builder</h2>
-    <select id="selectedBee"><option value="">-- Select a Bee --</option></select>
-    <button class="action" id="clearHive">Clear Hive</button>
-    <div id="hiveGrid" class="hive-grid"></div>
-  </div>
-
-  <!-- Guides -->
-  <div id="guides" class="page">
-    <h2>Guides & Bees</h2>
-    <input id="search" type="text" placeholder="Search bees, quests, items">
-
-    <h3>Honey Farming</h3>
-    <table id="honeyTable">
-      <tr><th>Field</th><th>Best Bees</th><th>Pollen</th><th>Honey/hr</th></tr>
-    </table>
-
-    <h3>Events / Seasonal Tips</h3>
-    <ul id="eventsList"></ul>
-
-    <h3>Equipment / Items</h3>
-    <ul id="equipmentList"></ul>
-
-    <h3>Hive Setup / Tips</h3>
-    <ul id="hiveTips"></ul>
-
-    <h3>Bees</h3>
-    <ul id="beeList"></ul>
+<!-- Home -->
+<div id="home" class="page active">
+  <p>Welcome to the Bee Swarm Fan Hub! Use the menu to navigate.</p>
+  <div class="cards">
+    <div class="card" data-page="profile">Profile / Lookup</div>
+    <div class="card" data-page="hive">Hive Builder</div>
+    <div class="card" data-page="guides">Guides & Bees</div>
   </div>
 </div>
 
+<!-- Profile -->
+<div id="profile" class="page">
+  <h2>Profile</h2>
+  <input id="username" type="text" placeholder="Username">
+  <input id="honey" type="text" placeholder="Honey amount">
+  <textarea id="notes" placeholder="Notes"></textarea>
+  <button class="action" id="saveProfile">Save Profile</button>
+  <button class="action" id="loadProfile">Load Profile</button>
+  <h3>Hive Preview</h3>
+  <div id="hivePreview" class="hive-grid"></div>
+  <h3>Player Lookup</h3>
+  <input id="lookupUsername" type="text" placeholder="Enter username">
+  <button class="action" id="searchPlayer">Search</button>
+  <div id="lookupResult"></div>
+</div>
+
+<!-- Hive -->
+<div id="hive" class="page">
+  <h2>Hive Builder</h2>
+  <select id="selectedBee"><option value="">-- Select Bee --</option></select>
+  <button class="action" id="clearHive">Clear Hive</button>
+  <div id="hiveGrid" class="hive-grid"></div>
+</div>
+
+<!-- Guides -->
+<div id="guides" class="page">
+  <h2>Guides & Bees</h2>
+  <input id="search" type="text" placeholder="Search bees, quests, items">
+  <h3>Honey Farming</h3>
+  <table id="honeyTable">
+    <tr><th>Field</th><th>Best Bees</th><th>Pollen</th><th>Honey/hr</th></tr>
+  </table>
+  <h3>Events / Seasonal Tips</h3>
+  <ul id="eventsList"></ul>
+  <h3>Equipment / Items</h3>
+  <ul id="equipmentList"></ul>
+  <h3>Hive Setup / Tips</h3>
+  <ul id="hiveTips"></ul>
+  <h3>Bees</h3>
+  <ul id="beeList"></ul>
+</div>
+
+</div>
+
 <script>
+document.addEventListener("DOMContentLoaded",()=>{
+  // --- Menu toggle ---
+  const menuBtn=document.querySelector('.menu-button');
+  const nav=document.querySelector('nav');
+  menuBtn.addEventListener('click',()=>nav.classList.toggle('open'));
+
   // --- Page Navigation ---
-  const pages = document.querySelectorAll('.page');
+  const pages=document.querySelectorAll('.page');
   document.querySelectorAll('button[data-page], .card[data-page]').forEach(el=>{
-    el.addEventListener('click', ()=>{
+    el.addEventListener('click',()=>{
       pages.forEach(p=>p.classList.remove('active'));
       document.getElementById(el.dataset.page).classList.add('active');
     });
   });
 
-  // --- Bee Data ---
-  const bees = [
+  // --- Sample Bee Data ---
+  const bees=[
     {name:"Basic Bee", type:"Collector", rarity:"Common", ability:"+1 pollen", notes:"Starter bee", wiki:"https://bee-swarm-simulator.fandom.com/wiki/Basic_Bee"},
     {name:"Brave Bee", type:"Fighter", rarity:"Rare", ability:"+1 bear damage", notes:"Good early-game fighter", wiki:"https://bee-swarm-simulator.fandom.com/wiki/Brave_Bee"},
     {name:"Rad Bee", type:"Collector", rarity:"Epic", ability:"+2 pollen", notes:"Great for midgame", wiki:"https://bee-swarm-simulator.fandom.com/wiki/Rad_Bee"},
     {name:"Bubble Bee", type:"Support", rarity:"Epic", ability:"Protects other bees", notes:"Helps survive Bear attacks", wiki:"https://bee-swarm-simulator.fandom.com/wiki/Bubble_Bee"}
   ];
 
-  // Populate bee dropdown
-  const beeSelect = document.getElementById('selectedBee');
-  bees.forEach(b=>{
-    const opt = document.createElement('option'); opt.value=b.name; opt.textContent=b.name;
-    beeSelect.appendChild(opt);
-  });
+  // --- Populate Bee Select ---
+  const beeSelect=document.getElementById('selectedBee');
+  bees.forEach(b=>{ const opt=document.createElement('option'); opt.value=b.name; opt.textContent=b.name; beeSelect.appendChild(opt); });
 
   // --- Hive Builder ---
-  const hiveGrid = document.getElementById('hiveGrid');
-  let hive = Array(50).fill(null);
-
+  const hiveGrid=document.getElementById('hiveGrid');
+  let hive=Array(50).fill(null);
   function renderHive(){
-    hiveGrid.innerHTML = '';
+    hiveGrid.innerHTML='';
     hive.forEach((b,i)=>{
-      const cell = document.createElement('div');
-      cell.textContent = b || '+';
-      cell.addEventListener('click', ()=>{
-        const selected = beeSelect.value;
-        hive[i] = selected || null;
+      const cell=document.createElement('div');
+      cell.textContent=b||'+';
+      cell.addEventListener('click',()=>{
+        hive[i]=beeSelect.value||null;
         renderHive();
         renderHivePreview();
       });
@@ -167,120 +260,63 @@
     });
   }
   renderHive();
-
-  document.getElementById('clearHive').addEventListener('click', ()=>{
-    hive = Array(50).fill(null);
-    renderHive();
-    renderHivePreview();
-  });
+  document.getElementById('clearHive').addEventListener('click',()=>{ hive=Array(50).fill(null); renderHive(); renderHivePreview(); });
 
   // --- Profile ---
-  const usernameInput = document.getElementById('username');
-  const honeyInput = document.getElementById('honey');
-  const notesInput = document.getElementById('notes');
-  const hivePreview = document.getElementById('hivePreview');
+  const usernameInput=document.getElementById('username');
+  const honeyInput=document.getElementById('honey');
+  const notesInput=document.getElementById('notes');
+  const hivePreview=document.getElementById('hivePreview');
+  function renderHivePreview(){ hivePreview.innerHTML=''; hive.forEach(b=>{ const cell=document.createElement('div'); cell.textContent=b||'+'; hivePreview.appendChild(cell); }); }
 
-  function renderHivePreview(){
-    hivePreview.innerHTML = '';
-    hive.forEach(b=>{
-      const cell = document.createElement('div');
-      cell.textContent = b || '+';
-      hivePreview.appendChild(cell);
-    });
-  }
-
-  document.getElementById('saveProfile').addEventListener('click', ()=>{
-    const profile = {
-      username: usernameInput.value,
-      honey: honeyInput.value,
-      notes: notesInput.value,
-      hive: hive
-    };
-    localStorage.setItem('profile', JSON.stringify(profile));
-    alert('Profile saved!');
-    renderHivePreview();
+  document.getElementById('saveProfile').addEventListener('click',()=>{
+    const profile={username:usernameInput.value,honey:honeyInput.value,notes:notesInput.value,hive:hive};
+    localStorage.setItem('profile',JSON.stringify(profile));
+    alert('Profile saved!'); renderHivePreview();
   });
-
-  document.getElementById('loadProfile').addEventListener('click', ()=>{
-    const profile = JSON.parse(localStorage.getItem('profile')||'{}');
-    if(profile.username) usernameInput.value = profile.username;
-    if(profile.honey) honeyInput.value = profile.honey;
-    if(profile.notes) notesInput.value = profile.notes;
-    if(profile.hive) hive = profile.hive;
-    renderHive();
-    renderHivePreview();
+  document.getElementById('loadProfile').addEventListener('click',()=>{
+    const profile=JSON.parse(localStorage.getItem('profile')||'{}');
+    if(profile.username) usernameInput.value=profile.username;
+    if(profile.honey) honeyInput.value=profile.honey;
+    if(profile.notes) notesInput.value=profile.notes;
+    if(profile.hive) hive=profile.hive;
+    renderHive(); renderHivePreview();
   });
 
   // --- Player Lookup ---
-  const lookupInput = document.getElementById('lookupUsername');
-  const lookupResult = document.getElementById('lookupResult');
-  document.getElementById('searchPlayer').addEventListener('click', ()=>{
-    const name = lookupInput.value.trim().toLowerCase();
-    const profile = JSON.parse(localStorage.getItem('profile')||'{}');
-    if(profile.username && profile.username.toLowerCase() === name){
-      let html = `<h4>${profile.username}</h4>`;
-      html += `<p>Honey: ${profile.honey}</p>`;
-      html += `<p>Notes: ${profile.notes}</p>`;
-      html += `<div class="hive-grid">`;
-      profile.hive.forEach(b=>{ html += `<div>${b||'+'}</div>`; });
-      html += `</div>`;
-      lookupResult.innerHTML = html;
-    } else lookupResult.innerHTML = "<p>Player not found.</p>";
+  const lookupInput=document.getElementById('lookupUsername');
+  const lookupResult=document.getElementById('lookupResult');
+  document.getElementById('searchPlayer').addEventListener('click',()=>{
+    const name=lookupInput.value.trim().toLowerCase();
+    const profile=JSON.parse(localStorage.getItem('profile')||'{}');
+    if(profile.username && profile.username.toLowerCase()===name){
+      let html=`<h4>${profile.username}</h4>`;
+      html+=`<p>Honey: ${profile.honey}</p>`;
+      html+=`<p>Notes: ${profile.notes}</p>`;
+      html+=`<div class="hive-grid">`; profile.hive.forEach(b=>{html+=`<div>${b||'+'}</div>`}); html+=`</div>`;
+      lookupResult.innerHTML=html;
+    } else lookupResult.innerHTML="<p>Player not found.</p>";
   });
 
   // --- Guides Data ---
-  const honeyFarms = [
-    {field:"Dewdrop Plains", bestBees:["Basic Bee","Rad Bee"], pollen:"Red Poppy", honeyPerHour:"50-80"},
-    {field:"Twin Peaks", bestBees:["Brave Bee","Bubble Bee"], pollen:"Bluebell", honeyPerHour:"80-120"}
-  ];
-  const events = [
-    {name:"Spring Event", tips:"Use Bubble Bee to protect low-level bees. Collect event pollen for rewards."},
-    {name:"Halloween Event", tips:"Rascal and Looker bees are most effective. Watch out for ghost bears."}
-  ];
-  const equipment = [
-    {item:"Standard Backpack", notes:"Increases pollen capacity."},
-    {item:"Field Boost", notes:"Temporary pollen multiplier."}
-  ];
-  const hiveTips = [
-    "Place high-buff bees in top row for efficiency.",
-    "Center slots are best for support bees."
-  ];
+  const honeyFarms=[{field:"Dewdrop Plains",bestBees:["Basic Bee","Rad Bee"],pollen:"Red Poppy",honeyPerHour:"50-80"},{field:"Twin Peaks",bestBees:["Brave Bee","Bubble Bee"],pollen:"Bluebell",honeyPerHour:"80-120"}];
+  const events=[{name:"Spring Event",tips:"Use Bubble Bee to protect low-level bees. Collect event pollen for rewards."},{name:"Halloween Event",tips:"Rascal and Looker bees are most effective. Watch out for ghost bears."}];
+  const equipment=[{item:"Standard Backpack",notes:"Increases pollen capacity."},{item:"Field Boost",notes:"Temporary pollen multiplier."}];
+  const hiveTips=["Place high-buff bees in top row for efficiency.","Center slots are best for support bees."];
 
-  const honeyTable = document.getElementById('honeyTable');
-  honeyFarms.forEach(f=>{
-    const row = honeyTable.insertRow();
-    row.insertCell().textContent = f.field;
-    row.insertCell().textContent = f.bestBees.join(', ');
-    row.insertCell().textContent = f.pollen;
-    row.insertCell().textContent = f.honeyPerHour;
-  });
+  const honeyTable=document.getElementById('honeyTable');
+  honeyFarms.forEach(f=>{ const row=honeyTable.insertRow(); row.insertCell().textContent=f.field; row.insertCell().textContent=f.bestBees.join(', '); row.insertCell().textContent=f.pollen; row.insertCell().textContent=f.honeyPerHour; });
 
-  const eventsList = document.getElementById('eventsList');
-  events.forEach(e=>{ const li = document.createElement('li'); li.textContent = `${e.name}: ${e.tips}`; eventsList.appendChild(li); });
+  const eventsList=document.getElementById('eventsList'); events.forEach(e=>{ const li=document.createElement('li'); li.textContent=`${e.name}: ${e.tips}`; eventsList.appendChild(li); });
+  const equipmentList=document.getElementById('equipmentList'); equipment.forEach(eq=>{ const li=document.createElement('li'); li.textContent=`${eq.item}: ${eq.notes}`; equipmentList.appendChild(li); });
+  const hiveTipsEl=document.getElementById('hiveTips'); hiveTips.forEach(tip=>{ const li=document.createElement('li'); li.textContent=tip; hiveTipsEl.appendChild(li); });
 
-  const equipmentList = document.getElementById('equipmentList');
-  equipment.forEach(eq=>{ const li = document.createElement('li'); li.textContent = `${eq.item}: ${eq.notes}`; equipmentList.appendChild(li); });
-
-  const hiveTipsEl = document.getElementById('hiveTips');
-  hiveTips.forEach(tip=>{ const li = document.createElement('li'); li.textContent = tip; hiveTipsEl.appendChild(li); });
-
-  const beeListEl = document.getElementById('beeList');
-  bees.forEach(b=>{
-    const li = document.createElement('li');
-    li.innerHTML = `<span class="tooltip">${b.name}<span class="tooltiptext">
-      Type: ${b.type}<br>Rarity: ${b.rarity}<br>Ability: ${b.ability}<br>Notes: ${b.notes}<br>
-      <a href="${b.wiki}" target="_blank">Wiki</a>
-    </span></span>`;
-    beeListEl.appendChild(li);
-  });
+  const beeListEl=document.getElementById('beeList'); bees.forEach(b=>{ const li=document.createElement('li'); li.innerHTML=`<span class="tooltip">${b.name}<span class="tooltiptext">Type: ${b.type}<br>Rarity: ${b.rarity}<br>Ability: ${b.ability}<br>Notes: ${b.notes}<br><a href="${b.wiki}" target="_blank">Wiki</a></span></span>`; beeListEl.appendChild(li); });
 
   // --- Search filter ---
-  document.getElementById('search').addEventListener('input', e=>{
-    const term = e.target.value.toLowerCase();
-    beeListEl.querySelectorAll('li').forEach(li=>{
-      li.style.display = li.textContent.toLowerCase().includes(term)? '' : 'none';
-    });
-  });
+  document.getElementById('search').addEventListener('input',e=>{ const term=e.target.value.toLowerCase(); beeListEl.querySelectorAll('li').forEach(li=>{ li.style.display=li.textContent.toLowerCase().includes(term)? '' : 'none'; }); });
+
+});
 </script>
 </body>
 </html>
