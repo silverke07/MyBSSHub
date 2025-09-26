@@ -1,3 +1,4 @@
+## STILL IN DEVELOPMENT
 # Bee Swarm Fan Hub
 
 A **fan-made Bee Swarm Simulator hub** that helps players manage their hives, track bees, plan honey farming, and access game guides. Fully offline and browser-based.
